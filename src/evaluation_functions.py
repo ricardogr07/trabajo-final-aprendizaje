@@ -97,31 +97,35 @@ def calculate_metrics_cv(model:BaseEstimator, X_train:pd.DataFrame, X_test:pd.Da
 
     return results
 
-def create_pipelines(models: dict, samplers: dict, feature_selection: dict = None, scalers: dict = None) -> list:
+def create_pipelines(models: dict, samplers: dict = None, feature_selection: dict = None, scalers: dict = None) -> list:
     """
     Crea múltiples pipelines combinando modelos, técnicas de muestreo, selección de características y escaladores.
     
     Input:
     - models (dict): Diccionario con modelos de clasificación, donde la clave es el nombre del modelo y el valor es el objeto del modelo.
-    - samplers (dict): Diccionario con técnicas de muestreo (ej. SMOTE), donde la clave es el nombre y el valor es el objeto del sampler.
+    - samplers (dict, opcional): Diccionario con técnicas de muestreo (ej. SMOTE), donde la clave es el nombre y el valor es el objeto del sampler.
+      Si no se especifica, no se usa un método de balanceo.
     - feature_selection (dict, opcional): Diccionario con métodos de selección de características, donde la clave es el nombre y el valor 
       es una función que toma un modelo y devuelve un selector de características. Si no se especifica, no se usa un selector.
     - scalers (dict, opcional): Diccionario con escaladores, donde la clave es el nombre y el valor es el objeto del escalador (ej. StandardScaler).
-      Si no se especifica, se usa StandardScaler por defecto.
+      Si no se especifica, no se usa un escalador.
 
     Output:
     - pipelines_list (list): Lista de diccionarios, donde cada uno contiene un pipeline configurado y su nombre.
       Cada pipeline puede incluir pasos como escalado, muestreo, selección de características y clasificación.
 
     """
+    # Si samplers es None o esta vacío, crear un diccionario predeterminado con 'None'
+    if not samplers:
+        samplers = {'None': None}
 
     # Si feature_selection es None o esta vacío, crear un diccionario predeterminado con 'None'
     if not feature_selection:
         feature_selection = {'None': lambda model: None}
     
-    # Si scalers es None o vacío, usar StandardScaler por defecto
+    # Si scalers es None o vacío, crear un diccionario predeterminado con 'None'
     if not scalers:
-        scalers = {'StandardScaler': StandardScaler()}
+        scalers = {'None': None}
 
     pipelines_list = []
 
