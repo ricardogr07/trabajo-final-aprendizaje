@@ -1,6 +1,5 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
 from sklearn.base import BaseEstimator 
 from sklearn.model_selection import cross_validate
 from sklearn.pipeline import Pipeline
